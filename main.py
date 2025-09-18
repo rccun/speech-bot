@@ -26,6 +26,7 @@ c = 0
 ids = []
 answer = ''
 usname = ''
+k = ''
 bot = Bot(token=apiska)
 dp = Dispatcher(bot)#, storage=MemoryStorage())
 logging.basicConfig(level=logging.INFO)
@@ -40,7 +41,7 @@ logging.basicConfig(level=logging.INFO)
 
 @dp.message_handler()
 async def start(mes: types.Message):
-    load_data()
+    #load_data()
     print(mes.chat.id)
     print(mes.from_user.id)
     group_id = -1002970117013
@@ -48,25 +49,27 @@ async def start(mes: types.Message):
     shorts = ['бля', 'пизд', 'хуй', 'еба']
     list_words = mes.text.split()
     #if mes.chat.id != -1002970117013:
-    #if mes.from_user.id != 1876535694: 
-    for i in list_words:
-        for j in shorts:
-            if i in words or j in i: 
-                usname = mes.from_user.username
-                if usname in alerts.keys():
-                    c = (alerts[usname] + 1) % 3
-                else: c = 1
-                if c == 0: 
-                    await mes.reply(f'Последнее предупреждение. Бан @{usname}')
-                    until_date = datetime.now() + timedelta(minutes=2)
-                    blacklist.append(usname)
-                    await bot.restrict_chat_member(chat_id=mes.chat.id, user_id=mes.from_user.id, until_date=until_date)
+    if mes.from_user.id != 866244297: 
+        for k in list_words:
+            i = k.lower()
+            for j in shorts:
+                if i in words or j in i: 
+                    usname = mes.from_user.username
+                    if usname in alerts.keys():
+                        c = (alerts[usname] + 1) % 3
+                    else: c = 1
+                    if c == 0: 
+                        await mes.reply(f'Последнее предупреждение. Бан @{usname}')
+                        until_date = datetime.now() + timedelta(minutes=2)
+                        blacklist.append(usname)
+                        await bot.restrict_chat_member(chat_id=mes.chat.id, user_id=mes.from_user.id, until_date=until_date)
+                        await mes.delete()
+                        break
+                    alerts[usname] = c
+                    await mes.reply(f"@{usname} не матерись пжлст\nПредупреждение: {c}/3")
+                    await bot.send_message(group_id, f'в группу {mes.chat.full_name} пидорас @{usname} отправил такую хуету: {mes.text}')
                     await mes.delete()
-                    break
-                alerts[usname] = c
-                await mes.reply(f"@{usname} не матерись пжлст\nПредупреждение: {c}/3")
-                await bot.send_message(group_id, f'в группу {mes.chat.full_name} пидорас @{usname} отправил такую хуету: {mes.text}')
-                await mes.delete()
+    else: await mes.reply("вероника лошаааааааааааааааааааара")
     # else: 
         #     await mes.reply(f'привет @rccun')
         #     print("ldjfsglkdfjglkfjglsd")
