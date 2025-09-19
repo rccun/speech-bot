@@ -23,7 +23,7 @@ async def upload_data():
     with open('alerts_doc.txt', 'w', encoding='utf-8') as f:
         for i, j in alerts.items():
             print(f'{i}:{j}')
-            f.write(f'{i}:{j}')
+            f.write(f'{i}:{j}\n')
 
 
 def convert_toDict(alerts_txt):
